@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 public class JsonArray
 {
-    private List<JsonInfo> list;
+    private List<JsonInfo> list = new List<JsonInfo>();
+
+    public JsonArray() {
+    }
+
     public JsonArray(List<JsonInfo> list)
     {
         this.list = list;
@@ -16,6 +20,13 @@ public class JsonArray
         return 0;
     }
 
+    public void add(JsonObject value)
+    {
+        if (list == null) return;
+
+        list.Add(value.getJsonInfo());
+    }
+    
     public void add(JsonValue value)
     {
         if (list == null) return;

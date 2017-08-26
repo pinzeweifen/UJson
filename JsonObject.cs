@@ -2,7 +2,13 @@
 
 public class JsonObject
 {
-    private JsonInfo jsonInfo;
+    private JsonInfo jsonInfo = new JsonInfo();
+
+    public JsonObject()
+    {
+        jsonInfo.type = ValueType.Object;
+    }
+
     public JsonObject(JsonInfo jsonInfo)
     {
         this.jsonInfo = jsonInfo;
@@ -30,6 +36,8 @@ public class JsonObject
     {
         if (!isNull())
         {
+            if (jsonInfo.list == null) return null;
+
             int count = jsonInfo.list.Count;
             for (int i = 0; i < count; i++)
             {
@@ -47,6 +55,8 @@ public class JsonObject
     {
         if (isNull()) return null;
 
+        if (jsonInfo.list == null) return null;
+
         List<JsonValue> list = new List<JsonValue>();
         int count = jsonInfo.list.Count;
         for (int i = 0; i < count; i++)
@@ -58,16 +68,26 @@ public class JsonObject
 
     public void add(JsonValue value)
     {
+        if (jsonInfo.list == null)
+            jsonInfo.list = new List<JsonInfo>();
+
         jsonInfo.list.Add(value.toJsonInfo());
     }
 
     public void insert(int index, JsonValue value)
     {
+        if (index >= jsonInfo.list.Count) return;
+
+        if (jsonInfo.list == null)
+            jsonInfo.list = new List<JsonInfo>();
+
         jsonInfo.list.Insert(index, value.toJsonInfo());
     }
 
     public void setValue(int index, JsonValue value)
     {
+        if (jsonInfo.list == null || index >= jsonInfo.list.Count) return;
+
         jsonInfo.list[index] = value.toJsonInfo();
     }
 

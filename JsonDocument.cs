@@ -14,9 +14,9 @@ public class JsonInfo
     public List<JsonInfo> list;
 }
 
-class JsonDocument
+public class JsonDocument
 {
-    private JsonInfo jsonInfo;
+    private JsonInfo jsonInfo = new JsonInfo();
 
     public static JsonDocument fromJson(string json, ref JsonParseError jsonError)
     {
@@ -46,6 +46,11 @@ class JsonDocument
         return document;
     }
 
+    public void setJsonObject(JsonObject json)
+    {
+        this.jsonInfo = json.getJsonInfo();
+    }
+    
     public void setJsonInfo(JsonInfo jsonInfo)
     {
         this.jsonInfo = jsonInfo;
@@ -56,9 +61,7 @@ class JsonDocument
         var str = toJson(jsonInfo);
         return str.Remove(str.Length - 1);
     }
-
     
-
     public bool isArray()
     {
         return jsonInfo.type == ValueType.Array;
@@ -87,7 +90,7 @@ class JsonDocument
     private string toJson(JsonInfo Info)
     {
         string tmp = string.Empty;
-        if (Info.key != string.Empty)
+        if (Info.key != null)
             tmp += '"' + Info.key + "\":";
 
         if (Info.type == ValueType.Array || Info.type == ValueType.Object)

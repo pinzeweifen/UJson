@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class JsonValue
 {
-    private JsonInfo jsonInfo;
+    private JsonInfo jsonInfo = new JsonInfo();
 
     public JsonValue() { }
 
@@ -49,6 +49,18 @@ public class JsonValue
     }
 
     public JsonValue(string key, double value)
+    {
+        setkey(key);
+        setValue(value);
+    }
+
+    public JsonValue(string key, JsonArray value)
+    {
+        setkey(key);
+        setValue(value);
+    }
+
+    public JsonValue(string key, JsonObject value)
     {
         setkey(key);
         setValue(value);
