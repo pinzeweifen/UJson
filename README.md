@@ -1,6 +1,6 @@
 ﻿UJson
 ___________________________________
-一个Json解析器
+一个用在Unity的Json解析器
 
 Token和Tokenizer来自[SimpleJSON](https://github.com/absfree/SimpleJSON)
 
