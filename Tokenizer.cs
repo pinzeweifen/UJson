@@ -39,9 +39,6 @@ public class Tokenizer
 
     private Token Inspect(ref JsonParseError jsonError)
     {
-        if (index >= data.Length)
-            return new Token(TokenType.END_DOC, "EOF");
-
         c = '?';
         while (isSpace(c = read())) ;
         if (isNull(c, ref jsonError))
@@ -88,6 +85,9 @@ public class Tokenizer
         {
             unread();
             return readNum(ref jsonError);
+        }else if(c == -1)
+        {
+            return new Token(TokenType.END_DOC, "EOF");
         }
 
         return null;
@@ -95,6 +95,8 @@ public class Tokenizer
 
     private int read()
     {
+        if (index >= data.Length) return -1;
+
         if (!isUnread)
         {
             int c = data[index++];

@@ -379,6 +379,8 @@ public class JsonDocument
             switch (tokens[i].getType())
             {
                 case TokenType.END_ARRAY:
+                    if (tokens[i + 1].getType() == TokenType.END_OBJ)
+                        break;
                     if (tokens[i + 1].getType() != TokenType.COMMA)
                         return true;
                     break;
