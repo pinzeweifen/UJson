@@ -20,6 +20,12 @@ public class JsonDocument
 
     public static JsonDocument fromJson(string json, ref JsonParseError jsonError)
     {
+        if(json == "")
+        {
+            jsonError.error = ParseError.GarbageAtEnd;
+            return null;
+        }
+
         JsonDocument document = new JsonDocument();
         Tokenizer tokenizer = new Tokenizer(json);
 
@@ -41,7 +47,10 @@ public class JsonDocument
             return null;
         }
 
-        document.jsonInfo = JObject(tokenizer.Tokens, 0, ref jsonError);
+        if(tokenizer.Tokens[0].getType() == TokenType.START_OBJ)
+            document.jsonInfo = JObject(tokenizer.Tokens, 0, ref jsonError);
+        else if(tokenizer.Tokens[0].getType() == TokenType.START_ARRAY)
+            document.jsonInfo = JArray(tokenizer.Tokens, 0, ref jsonError);
 
         return document;
     }
@@ -90,7 +99,7 @@ public class JsonDocument
     private string toJson(JsonInfo Info)
     {
         string tmp = string.Empty;
-        if (Info.key != null)
+        if (Info.key != "")
             tmp += '"' + Info.key + "\":";
 
         if (Info.type == ValueType.Array || Info.type == ValueType.Object)
@@ -119,7 +128,7 @@ public class JsonDocument
     private string value(ValueType type, string str)
     {
         if (type == ValueType.String)
-            return str + "\",";
+            return "\""+str + "\",";
         else
             return str + ",";
     }
@@ -373,40 +382,44 @@ public class JsonDocument
 
     private static bool isSeparate(List<Token> tokens, ref JsonParseError jsonError)
     {
+        TokenType type = TokenType.START_OBJ;
         int count = tokens.Count;
         for (int i = 0; i < count; i++)
         {
+            if(i+1<tokens.Count)
+                type = tokens[i + 1].getType();
+
             switch (tokens[i].getType())
             {
                 case TokenType.END_ARRAY:
-                    if (tokens[i + 1].getType() == TokenType.END_OBJ)
+                    if (type == TokenType.END_OBJ || type == TokenType.END_DOC)
                         break;
-                    if (tokens[i + 1].getType() != TokenType.COMMA)
+                    if (type != TokenType.COMMA)
                         return true;
                     break;
 
                 case TokenType.END_OBJ:
-                    if (tokens[i + 1].getType() == TokenType.END_ARRAY || tokens[i + 1].getType() == TokenType.END_DOC)
+                    if (type == TokenType.END_ARRAY || type == TokenType.END_DOC)
                         break;
-                    if (tokens[i + 1].getType() != TokenType.COMMA)
+                    if (type != TokenType.COMMA)
                         return true;
                     break;
 
                 case TokenType.NULL:
                 case TokenType.NUMBER:
                 case TokenType.BOOLEAN:
-                    if (tokens[i + 1].getType() == TokenType.END_ARRAY || tokens[i + 1].getType() == TokenType.END_OBJ)
+                    if (type == TokenType.END_ARRAY || type == TokenType.END_OBJ)
                         break;
-                    if (tokens[i + 1].getType() != TokenType.COMMA)
+                    if (type != TokenType.COMMA)
                         return true;
                     break;
 
                 case TokenType.STRING:
                     if (tokens[i - 1].getType() == TokenType.COLON)
                     {
-                        if (tokens[i + 1].getType() == TokenType.END_ARRAY || tokens[i + 1].getType() == TokenType.END_OBJ)
+                        if (type == TokenType.END_ARRAY || type == TokenType.END_OBJ)
                             break;
-                        if (tokens[i + 1].getType() != TokenType.COMMA)
+                        if (type != TokenType.COMMA)
                             return true;
                     }
                     break;

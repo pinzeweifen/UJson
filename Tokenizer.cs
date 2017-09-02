@@ -33,7 +33,10 @@ public class Tokenizer
             tokens.Add(token);
         } while (token.getType() != TokenType.END_DOC);
 
-        if (tokens[tokens.Count - 2].getType() != TokenType.END_OBJ)
+        if (tokens[tokens.Count - 2].getType() == TokenType.END_OBJ ||
+            tokens[tokens.Count - 2].getType() == TokenType.END_ARRAY)
+            return;
+
             jsonError.error = ParseError.GarbageAtEnd;
     }
 
