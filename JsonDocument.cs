@@ -99,7 +99,7 @@ public class JsonDocument
     private string toJson(JsonInfo Info)
     {
         string tmp = string.Empty;
-        if (Info.key != "")
+        if (Info.key != ""&&Info.key!=null)
             tmp += '"' + Info.key + "\":";
 
         if (Info.type == ValueType.Array || Info.type == ValueType.Object)
@@ -128,7 +128,9 @@ public class JsonDocument
     private string value(ValueType type, string str)
     {
         if (type == ValueType.String)
-            return "\""+str + "\",";
+            return "\"" + str + "\",";
+        else if (type == ValueType.Null)
+            return "null,";
         else
             return str + ",";
     }
