@@ -1,17 +1,36 @@
 {
-	"equip":[
-		{
-			"name":"q1",
-			"icon":"#23"
-		},
-		{
-			"name":"ass\nq2",
-			"icon":"#24"	
-		}
-	],
-	"value":{
-		"sp":23333
-	},
-	"num":123,
-    "q1":1.5
+    "root": [
+        "JSON Test Pattern pass1",
+        {
+            "object with 1 member": [
+                "array with 1 element"
+            ]
+        },
+        {},
+        [],
+        -42,
+        true,
+        false,
+        null,
+        {
+            "integer": 1234567890,
+            "real": -9876.54321,
+            "e": 1.23456789e-13,
+            "E": 1.23456789e+34,
+            "zero": 0,
+            "one": 1,
+            "space": " ",
+            "quote": "\"",
+            "backslash": "\\",
+            "slash": "/ & /",
+            "alpha": "abcdefghijklmnopqrstuvwyz",
+            "ALPHA": "ABCDEFGHIJKLMNOPQRSTUVWYZ",
+            "digit": "0123456789"
+        },
+        0.5,
+        98.6,
+        99.44,
+        1066,
+        "rosebud"
+    ]
 }
