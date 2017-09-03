@@ -32,7 +32,7 @@ public class Tokenizer
                 break;
             tokens.Add(token);
         } while (token.getType() != TokenType.END_DOC);
-
+        
         if (tokens[tokens.Count - 2].getType() == TokenType.END_OBJ ||
             tokens[tokens.Count - 2].getType() == TokenType.END_ARRAY)
             return;
@@ -349,6 +349,7 @@ public class Tokenizer
         while (isDigit(c))
         {
             sb.Append((char)c);
+            if (data[index] == ',') return;
             c = read();
         }
     }

@@ -171,33 +171,30 @@ public class JsonDocument
         info.list = new List<JsonInfo>();
         int end = GetValueEndIndex(tokens, index);
 
-        switch (tokens[index + 1].getType())
+        for (int i = index+1; i < end; i++)
         {
-            case TokenType.START_OBJ:
-                for (int i = index + 1; i < end; i += 2)
-                {
-                    info.list.Add(JObject(tokens, i, ref jsonError));
-                    i = GetValueEndIndex(tokens, i);
-                }
-                break;
-            case TokenType.START_ARRAY:
-                for (int i = index + 1; i < end; i += 2)
-                {
-                    info.list.Add(JArray(tokens, i, ref jsonError));
-                    i = GetValueEndIndex(tokens, i);
-                }
-                break;
-            default:
-                for (int i = index + 1; i < end; i += 2)
-                {
+            switch (tokens[i].getType())
+            {
+                case TokenType.START_OBJ:
+                        info.list.Add(JObject(tokens, i, ref jsonError));
+                        i = GetValueEndIndex(tokens, i);
+                    break;
+                case TokenType.START_ARRAY:
+                        info.list.Add(JArray(tokens, i, ref jsonError));
+                        i = GetValueEndIndex(tokens, i);
+                    break;
+                case TokenType.BOOLEAN:
+                case TokenType.NUMBER:
+                case TokenType.NULL:
+                case TokenType.STRING:
                     JsonInfo ji = new JsonInfo
-                    {
-                        value = tokens[i].getValue(),
-                        type = GetType(tokens, i)
-                    };
-                    info.list.Add(ji);
-                }
-                break;
+                        {
+                            value = tokens[i].getValue(),
+                            type = GetType(tokens, i)
+                        };
+                        info.list.Add(ji);
+                    break;
+            }
         }
 
         return info;
