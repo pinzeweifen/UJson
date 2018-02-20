@@ -10,9 +10,28 @@ public class FileOperate {
         return new FileInfo(path).Exists;
     }
 
+    public static bool Write(string path, string data,bool isAppend = false)
+    {
+        path = Application.dataPath + "/" + path;
+        StreamWriter sw;
+        FileInfo fi = new FileInfo(path);
+        if (!IsFileExists(path))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+        }
+        if (!isAppend)
+            sw = fi.CreateText();
+        else
+            sw = fi.AppendText();
+        sw.WriteLine(data);
+        sw.Close();
+        sw.Dispose();
+        return false;
+    }
+
     public static ArrayList ReadFileToArray(string path)
     {
-        path = "Assets/" + path;
+        path = Application.dataPath + "/" + path;
         if (!IsFileExists(path))
         {
             return null;
@@ -33,7 +52,7 @@ public class FileOperate {
 
     public static string ReadFileToString(string path)
     {
-        path = "Assets/" + path;
+        path = Application.dataPath + "/" + path;
         if (!IsFileExists(path)) return string.Empty;
 
         StreamReader Reader = File.OpenText(path);
